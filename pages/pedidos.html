@@ -11,21 +11,11 @@
   <script type="text/javascript" src="/js/materialize.min.js"></script>
 </head>
 <body class="grey lighten-4">
-  
-  
-  <!-- Menu lateral -->
-  <ul id="side-menu" class="sidenav side-menu">
-    <li><a class="subheader">VentaPatito</a></li>
-    <li><a href="/" class="waves-effect">Inicio</a></li>
-    <li><a href="/pages/about.html" class="waves-effect">Acerca</a></li>
-    <li><div class="divider"></div></li>
-    <li><a href="/pages/pedidos.html" class="waves-effect">Pedidos</a></li>
-  </ul>
 
   <!-- top nav -->
   <nav class="z-depth-0">
     <div class="nav-wrapper container">
-      <a href="/">Food<span>Ninja</span></a>
+      <a href="/">Venta<span>Patito</span></a>
       <span class="right grey-text text-darken-1">
         <i class="material-icons sidenav-trigger" data-target="side-menu">menu</i>
       </span>
@@ -34,7 +24,7 @@
 
   <!-- side nav -->
   <ul id="side-menu" class="sidenav side-menu">
-    <li><a class="subheader">FOODNINJA</a></li>
+    <li><a class="subheader">VentaPatito</a></li>
     <li><a href="/" class="waves-effect">Home</a></li>
     <li><a href="/pages/about.html" class="waves-effect">About</a></li>
     <li><div class="divider"></div></li>
@@ -45,14 +35,28 @@
 
   <!-- content -->
   <div class="container grey-text">
-    <h5 class="center">Contact Us</h5>
-    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ducimus, porro voluptatum illum veniam eaque sunt sit labore provident eligendi! Voluptate amet suscipit inventore unde maxime atque impedit officia nobis laboriosam!</p>
-    <div class="divider"></div>
-    <h6>Find us at:</h6>
-    <ul>
-      <li>123 Spicy Noodle Road</li>
-      <li>Manchester, UK</li>
-    </ul>
+        <div class="input-field">
+          <label for="platillo" class="active">Platillo</label>
+          <select id="listaPlatillos" name="platillo" class="browser-default" style="margin-top: 15px; border: 1px solid #ccc; border-radius: 4px; padding: 5px;">
+            <option value="" disabled selected>Seleccionar...</option>
+          </select>
+        </div>
+
+        <div class="input-field">
+          <input id="nombre" type="text" class="validate" name="nombre">
+          <label for="nombre">Nombre</label>
+        </div>
+
+        <div class="input-field">
+          <textarea id="direccion" class="materialize-textarea" name="direccion"></textarea>
+          <label for="direccion">Dirección</label>
+        </div>
+
+        <div class="input-field center" style="margin-top: 40px;">
+          <button type="button" class="btn grey lighten-1 z-depth-0" style="margin-right: 10px;">Cancelar</button>
+          <button type="submit" class="btn add-btn z-depth-0">Guardar</button>
+        </div>
+
   </div>
 
   <script src="/js/ui.js"></script>

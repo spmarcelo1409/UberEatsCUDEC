@@ -24,13 +24,15 @@
 
   <!-- Menu lateral -->
   <ul id="side-menu" class="sidenav side-menu">
-    <li><a class="subheader">UberEatsCUDEC</a></li>
+    <li><a class="subheader">VentaPatito</a></li>
     <li><a href="/" class="waves-effect">Inicio</a></li>
     <li><a href="/pages/about.html" class="waves-effect">Acerca</a></li>
     <li><div class="divider"></div></li>
     <li><a href="/pages/contact.html" class="waves-effect">
       <i class="material-icons">mail_outline</i>Contacto</a>
     </li>
+    <li><div class="divider"></div></li>
+    <li><a href="/pages/pedidos.html" class="waves-effect">Pedidos</a></li>
   </ul>
 
   <!-- Lista de platillos -->
@@ -54,8 +56,12 @@
         <label for="title">Nombre</label>
       </div>
       <div class="input-field">
-        <input placeholder="e.g. Tofu, mushroom, garlic" id="ingredients" type="text" class="validate">
+        <input placeholder="e.g. Tofu, mushroom, garlic" id="ingredientes" type="text" class="validate">
         <label for="ingredients">Ingredientes</label>
+      </div>
+      <div class="input-field">
+        <input placeholder="ejemplo: 50.00" id="price" type="text" class="validate">
+        <label for="price">Precio</label>
       </div>
       <div class="input-field center">
         <button class="btn-small">Agregar</button>
@@ -71,13 +77,14 @@
 
       <script>
         const firebaseConfig = {
-          apiKey: "AIzaSyD3VElB14xeGkpTYT3FMwbtTSKnqccC4j8",
-          authDomain: "appmovil-a6da0.firebaseapp.com",
-          projectId: "appmovil-a6da0",
-          storageBucket: "appmovil-a6da0.firebasestorage.app",
-          messagingSenderId: "446171372745",
-          appId: "1:446171372745:web:8758f7ca1eda980253c118",
-       };
+  apiKey: "AIzaSyD3VElB14xeGkpTYT3FMwbtTSKnqccC4j8",
+  authDomain: "appmovil-a6da0.firebaseapp.com",
+  projectId: "appmovil-a6da0",
+  storageBucket: "appmovil-a6da0.firebasestorage.app",
+  messagingSenderId: "446171372745",
+  appId: "1:446171372745:web:8758f7ca1eda980253c118",
+  measurementId: "G-SCBEMMDRGD"
+};
 
        firebase.initializeApp(firebaseConfig);
        const db = firebase.firestore();
