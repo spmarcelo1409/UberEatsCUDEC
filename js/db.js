@@ -1,16 +1,20 @@
-db.collection("platillos").onSnapshot((coleccion) => {
-    coleccion.docChanges().forEach((registro) => {
-        if (registro.type === "added"){
+db.collection("platillos").onSnapshot((datos) => {
+    contenidoLista = ""; // Asumo que esta variable la tienes declarada más arriba
+    
+    datos.docChanges().forEach((registro) => {
+        if (registro.type === "added") {
             mostrarPlatillo(registro.doc.data(), registro.doc.id);
-            agregarALista(registro.doc.data(), registro.doc.id);
         }
-        if (registro.type === "modified"){
+        if (registro.type === "modified") {
             actualizarPlatillo(registro.doc.data(), registro.doc.id);
         }
-        if (registro.type === "removed"){
-            borrarPlatillo(registro.doc.id);
+        // --- AQUÍ IMPLEMENTAMOS LA ESCUCHA DEL BORRADO ---
+        if (registro.type === "removed") {
+            // Esta función quitará el platillo de tu HTML visualmente
+            borrarPlatillo(registro.doc.id); 
         }
     });
+
 });
 
 const formularioAgregar = document.querySelector("form");
