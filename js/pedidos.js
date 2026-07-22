@@ -56,9 +56,11 @@ function limpiarFormulario() {
     M.updateTextFields();
 }
 
+let mapa;
+
 document.getElementById("btnUbicacion").addEventListener("click", function() {
-    if (navigator.geoLocation) {
-        navigator.geoLocation.getCurrentPosition(exito, error);
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(exito, error);
     }
 });
 
@@ -71,9 +73,27 @@ function exito(posicion) {
         }
 })
     .then(response => response.json())
-    .then(data => alert(data.display_name))
-    .catch(error => console.error(error));  
-    
+    .then(data => {
+        const inputDireccion = document.getElementById("direccion");
+        if (inputDireccion) {
+            inputDireccion.value = data.display_name;
+            M.updateTextFields();
+        }
+
+        // Mostrar la ubicación en el mapa
+        if (!mapa) {
+            mapa = L.map('mapa').setView([latitud, longitud], 15);
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(mapa);
+        } else {
+            mapa.setView([latitud, longitud], 15);
+        }
+        L.marker([latitud, longitud]).addTo(mapa);
+    })
+    .catch(error => console.error(error));
+
 }
 
 function error(error) {
