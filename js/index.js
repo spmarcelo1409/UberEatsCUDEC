@@ -1,114 +1,205 @@
-let contenido = "";
+// Renderizado de la lista de platillos y captura de foto con la camara.
+// Solo se carga en index.html.
 
-document.addEventListener('DOMContentLoaded', function() {
-  // nav menu
-  const menus = document.querySelectorAll('.side-menu');
-  M.Sidenav.init(menus, {edge: 'right'});
-  // add recipe form
-  const forms = document.querySelectorAll('.side-form');
-  M.Sidenav.init(forms, {edge: 'left'});
-});
+const FOTO_POR_DEFECTO = '/img/Comida_def.jpg';
+const listado = document.querySelector('.recipes');
+
+/* ------------------------------------------------------------------ */
+/* Lista de platillos                                                   */
+/* ------------------------------------------------------------------ */
+
+function formatearPrecio(precio) {
+  const numero = Number.parseFloat(precio);
+  return Number.isFinite(numero)
+    ? 'Precio: $' + numero.toFixed(2) + ' MXN'
+    : 'Precio: no disponible';
+}
+
+function buscarTarjeta(id) {
+  return listado ? listado.querySelector('.recipe[data-id="' + id + '"]') : null;
+}
+
+// Se construye con la API del DOM (no con innerHTML) para que el nombre o los
+// ingredientes no puedan inyectar HTML en la pagina.
+function crearTarjeta(platillo, id) {
+  const tarjeta = document.createElement('div');
+  tarjeta.className = 'card-panel recipe white row';
+  tarjeta.dataset.id = id;
+
+  const imagen = document.createElement('img');
+  imagen.src = platillo.foto || FOTO_POR_DEFECTO;
+  imagen.alt = 'Foto del platillo';
+  imagen.addEventListener('error', function () {
+    imagen.src = FOTO_POR_DEFECTO;
+  });
+
+  const detalles = document.createElement('div');
+  detalles.className = 'recipe-details';
+
+  const titulo = document.createElement('div');
+  titulo.className = 'recipe-title';
+  titulo.textContent = platillo.nombre || 'Sin nombre';
+
+  const ingredientes = document.createElement('div');
+  ingredientes.className = 'recipe-ingredients';
+  ingredientes.textContent = platillo.ingredientes || '';
+
+  const precio = document.createElement('div');
+  precio.className = 'recipe-precio';
+  precio.textContent = formatearPrecio(platillo.precio);
+
+  const contenedorBorrar = document.createElement('div');
+  contenedorBorrar.className = 'recipe-delete';
+
+  const iconoBorrar = document.createElement('i');
+  iconoBorrar.className = 'material-icons';
+  iconoBorrar.textContent = 'delete_outline';
+  iconoBorrar.title = 'Eliminar platillo';
+
+  contenedorBorrar.appendChild(iconoBorrar);
+  detalles.appendChild(titulo);
+  detalles.appendChild(ingredientes);
+  detalles.appendChild(precio);
+  detalles.appendChild(contenedorBorrar);
+  tarjeta.appendChild(imagen);
+  tarjeta.appendChild(detalles);
+
+  return tarjeta;
+}
 
 function mostrarPlatillo(platillo, id) {
-  let fotoPlatillo;
-  if (platillo.foto) {
-    fotoPlatillo = platillo.foto;
-  } else {
-    fotoPlatillo = "/img/Comida_def.jpg";
-  }
-  contenido = `
-    <div class='card-panel recipe white row' id='${id}' data-id='${id}'>
-        <img src="${fotoPlatillo}" alt="Foto del platillo">
-        <div class='recipe-details'>
-
-          <div class='recipe-title'>${platillo.nombre}</div>
-          <div class='recipe-ingredients'>${platillo.ingredientes}</div>
-          <div class='recipe-precio'>Precio: $${platillo.precio} MXN</div>
-
-          <div class="recipe-delete">
-            <i class="material-icons" data-id='${id}'>
-            delete_outline
-            </i>
-          </div>
-
-        </div>
-    </div>
-  `;
-    document.querySelector(".recipes").innerHTML += contenido;
-
-    limpiarFoto();
-};
-
-function actualizarPlatillo(platillo,id){
-  let tarjeta = document.getElementById(`${id}`);
-  tarjeta.querySelector(".recipe-title").innerHTML = platillo.nombre;
-  tarjeta.querySelector(".recipe-ingredientes").innerHTML = platillo.ingredientes;
-  tarjeta.querySelector(".recipe-precio").innerHTML = platillo.precio;
+  if (!listado || buscarTarjeta(id)) return; // evita duplicados
+  listado.appendChild(crearTarjeta(platillo, id));
 }
 
-const borrarPlatillo = (id) =>{
-  const platillo = document.querySelector(`.recipe[data-id=${id}]`);
-  platillo.remove();
-};
+function actualizarPlatillo(platillo, id) {
+  const tarjeta = buscarTarjeta(id);
+  if (!tarjeta) return;
 
-let streaming = false;
-const width = 320;
-let height = 0;
+  tarjeta.querySelector('.recipe-title').textContent = platillo.nombre || 'Sin nombre';
+  tarjeta.querySelector('.recipe-ingredients').textContent = platillo.ingredientes || '';
+  tarjeta.querySelector('.recipe-precio').textContent = formatearPrecio(platillo.precio);
+  tarjeta.querySelector('img').src = platillo.foto || FOTO_POR_DEFECTO;
+}
+
+function borrarPlatillo(id) {
+  const tarjeta = buscarTarjeta(id);
+  if (tarjeta) tarjeta.remove();
+}
+
+// Aviso visible dentro de la lista, en lugar de un alert en cada carga.
+function mostrarAviso(texto) {
+  if (!listado) return;
+  let aviso = listado.querySelector('.aviso');
+  if (!aviso) {
+    aviso = document.createElement('div');
+    aviso.className = 'aviso card-panel white';
+    listado.prepend(aviso);
+  }
+  aviso.textContent = texto;
+}
+
+/* ------------------------------------------------------------------ */
+/* Camara                                                               */
+/* ------------------------------------------------------------------ */
+
 const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
+const salida = document.getElementById('salida');
 const foto = document.getElementById('foto');
 const btnFoto = document.getElementById('btnFoto');
-
-btnFoto.addEventListener("click", function() {
-  navigator.mediaDevices
-    .getUserMedia({
-        video: true,
-        audio: false
-  })
-  .then((stream) => {
-    video.srcObject = stream;
-    video.play();
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-})
-
-video.addEventListener('canplay', function() {
-  if (!streaming) {
-      // Calcula la proporción para que la foto no se vea estirada
-      height = video.videoHeight / (video.videoWidth / width);
-
-      video.setAttribute("width", width);
-      video.setAttribute("height", height);
-      canvas.setAttribute("width", width);
-      canvas.setAttribute("height", height);
-      streaming = true;
-  }
-}, false);
-
 const btnCapturar = document.getElementById('btnCapturar');
-btnCapturar.addEventListener("click", tomarFoto);
+const campoFoto = document.getElementById('fotoFinal');
 
-function tomarFoto() {
-  const contexto = canvas.getContext("2d");
-  if (width && height) {
-      canvas.width = width;
-      canvas.height = height;
-      contexto.drawImage(video, 0, 0, width, height);
-      const fotoFinal = canvas.toDataURL("image/png");
-      foto.setAttribute("src", fotoFinal);
-      document.getElementById("fotoFinal").value = fotoFinal;
-  } else {
-      limpiarFoto();
+// Si alguno falta es que no estamos en index.html: no se engancha nada.
+if (video && canvas && salida && foto && btnFoto && btnCapturar && campoFoto) {
+  const ANCHO = 320;
+  let alto = 0;
+  let streaming = false;
+  let streamActual = null;
+
+  video.setAttribute('playsinline', '');
+  video.muted = true;
+
+  function detenerCamara() {
+    if (streamActual) {
+      streamActual.getTracks().forEach(function (track) { track.stop(); });
+      streamActual = null;
+    }
+    video.srcObject = null;
+    streaming = false;
+    alto = 0;
+    btnCapturar.disabled = true;
+    btnFoto.textContent = 'Imagen';
   }
-}
 
-// Función de respaldo por si no hay cámara activa
-function limpiarFoto() {
-  const contexto = canvas.getContext('2d');
-  contexto.fillStyle = "#AAA";
-  contexto.fillRect(0, 0, canvas.width, canvas.height);
-  const data = canvas.toDataURL('image/png');
-  foto.setAttribute('src', data);
+  btnFoto.addEventListener('click', function () {
+    if (streamActual) {
+      detenerCamara();
+      return;
+    }
+
+    // getUserMedia solo existe en contexto seguro (https o localhost).
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      alert('La camara no esta disponible. Abre la app por https o desde localhost.');
+      return;
+    }
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+      .then(function (stream) {
+        streamActual = stream;
+        video.srcObject = stream;
+        btnFoto.textContent = 'Apagar camara';
+        return video.play();
+      })
+      .catch(function (error) {
+        console.error('No se pudo abrir la camara:', error);
+        alert('No se pudo abrir la camara: ' + error.message);
+        detenerCamara();
+      });
+  });
+
+  video.addEventListener('canplay', function () {
+    if (streaming || !video.videoWidth) return;
+
+    alto = video.videoHeight / (video.videoWidth / ANCHO);
+    video.setAttribute('width', ANCHO);
+    video.setAttribute('height', alto);
+    canvas.setAttribute('width', ANCHO);
+    canvas.setAttribute('height', alto);
+    streaming = true;
+    btnCapturar.disabled = false;
+  });
+
+  btnCapturar.addEventListener('click', function () {
+    if (!streaming || !alto) {
+      alert('Primero enciende la camara con el boton "Imagen".');
+      return;
+    }
+
+    canvas.width = ANCHO;
+    canvas.height = alto;
+    canvas.getContext('2d').drawImage(video, 0, 0, ANCHO, alto);
+
+    // JPEG al 70%: unos 20 KB, muy por debajo del limite de 1 MiB por documento
+    // de Firestore. Con PNG una sola foto podia pasar de 200 KB.
+    const fotoFinal = canvas.toDataURL('image/jpeg', 0.7);
+    foto.src = fotoFinal;
+    campoFoto.value = fotoFinal;
+    salida.style.display = 'block';
+    detenerCamara();
+  });
+
+  btnCapturar.disabled = true;
+  salida.style.display = 'none';
+
+  // Permite que db.js limpie la vista previa despues de guardar.
+  window.limpiarFoto = function () {
+    campoFoto.value = '';
+    foto.removeAttribute('src');
+    salida.style.display = 'none';
+    detenerCamara();
+  };
+} else {
+  window.limpiarFoto = function () {};
 }

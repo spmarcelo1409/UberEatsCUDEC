@@ -58,9 +58,41 @@ nav .sidenav-trigger{
   font-size: 0.8em;
 }
 
+.recipe-precio{
+  font-size: 0.9em;
+  margin-top: 4px;
+}
+.aviso{
+  border-left: 4px solid var(--title);
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+/* camara */
+#camara video{
+  display: block;
+  max-width: 100%;
+  border-radius: 8px;
+  background: #000;
+}
+/* El canvas solo se usa para capturar el frame, nunca se muestra. */
+#canvas{
+  display: none;
+}
+#salida img{
+  display: block;
+  max-width: 100%;
+  margin-top: 10px;
+  border-radius: 8px;
+}
+
 /* form-styles */
 .add-btn{
   background: var(--title) !important;
+}
+button[disabled]{
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 input{
   box-shadow: none !important;
