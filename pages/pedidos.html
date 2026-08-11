@@ -2,61 +2,39 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>VentaPatito - Pedidos</title>
+
   <!-- materialize icons, css & js -->
   <link type="text/css" href="../css/materialize.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" href="../css/styles.css" rel="stylesheet">
   <script type="text/javascript" src="../js/materialize.min.js"></script>
+
   <!-- Mapa (Leaflet) -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-  crossorigin=""/>
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-  crossorigin=""></script>
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
   <style>
     #mapa{ height: 220px; margin-top: 15px; }
     #qrcode{ margin-top: 10px; }
     #qrcode img, #qrcode canvas{ display: inline-block; }
   </style>
 
-   <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="../manifest.json">
+  <meta name="theme-color" content="#FF8816">
+
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="application-name" content="VPTT">
   <meta name="apple-mobile-web-app-title" content="VPTT">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <link rel="icon" type="image/png" sizes="16x16" href="../iconos/icon-16x16.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="16x16" href="../iconos/icon-16x16.png">
   <link rel="icon" type="image/png" sizes="32x32" href="../iconos/icon-32x32.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="32x32" href="../iconos/icon-32x32.png">
-  <link rel="icon" type="image/png" sizes="48x48" href="../iconos/icon-48x48.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="48x48" href="../iconos/icon-48x48.png">
-  <link rel="icon" type="image/png" sizes="64x64" href="../iconos/icon-64x64.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="64x64" href="../iconos/icon-64x64.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="../iconos/icon-96x96.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="96x96" href="../iconos/icon-96x96.png">
-  <link rel="icon" type="image/png" sizes="128x128" href="../iconos/icon-128x128.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="128x128" href="../iconos/icon-128x128.png">
-  <link rel="icon" type="image/png" sizes="144x144" href="../iconos/icon-144x144.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="144x144" href="../iconos/icon-144x144.png">
-  <link rel="icon" type="image/png" sizes="152x152" href="../iconos/icon-152x152.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="152x152" href="../iconos/icon-152x152.png">
-  <link rel="icon" type="image/png" sizes="180x180" href="../iconos/icon-180x180.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../iconos/icon-180x180.png">
   <link rel="icon" type="image/png" sizes="192x192" href="../iconos/icon-192x192.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="../iconos/icon-192x192.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="../iconos/icon-192x192-maskable.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="192x192" href="../iconos/icon-192x192-maskable.png">
-  <link rel="icon" type="image/png" sizes="384x384" href="../iconos/icon-384x384.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="384x384" href="../iconos/icon-384x384.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="../iconos/icon-512x512.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="../iconos/icon-512x512.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="../iconos/icon-512x512-maskable.png">
-  <link rel="apple-touch-icon" type="image/png" sizes="512x512" href="../iconos/icon-512x512-maskable.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../iconos/icon-180x180.png">
 </head>
 <body class="grey lighten-4">
 
@@ -86,58 +64,51 @@
   <!-- content -->
   <div class="container grey-text">
     <form class="add-recipe container section">
-        <div class="input-field">
-          <label for="platillo" class="active">Platillo</label>
-          <select id="listaPlatillos" name="platillo" class="browser-default" style="margin-top: 15px; border: 1px solid #ccc; border-radius: 4px; padding: 5px;">
-            <option value="" disabled selected>Seleccionar...</option>
-          </select>
-        </div>
-
-        <div class="input-field">
-          <input id="nombre" type="text" class="validate" name="nombre">
-          <label for="nombre">Nombre</label>
-        </div>
-
-        <div class="input-field">
-          <textarea id="direccion" class="materialize-textarea" name="direccion"></textarea>
-          <label for="direccion">Dirección</label>
-        </div>
-
-        <div class="input-field center" style="margin-top: 40px;">
-          <button id="btnCancelar" type="button" class="btn grey lighten-1 z-depth-0" style="margin-right: 10px;">Cancelar</button>
-          <button id="btnGuardar" type="button" class="btn add-btn z-depth-0">Guardar</button>
-        </div>
-    </form>
-
-      <!-- Codigo QR del pedido registrado -->
-      <div class="input-field center">
-        <h6>Código QR del pedido</h6>
-        <div id="qrcode"></div>
+      <div class="input-field">
+        <label for="listaPlatillos" class="active">Platillo</label>
+        <select id="listaPlatillos" name="platillo" class="browser-default"
+          style="margin-top: 15px; border: 1px solid #ccc; border-radius: 4px; padding: 5px;">
+          <option value="" disabled selected>Seleccionar...</option>
+        </select>
       </div>
 
       <div class="input-field">
-        <a class="waves-effect waves-light btn" id="btnUbicacion" style="background-color: var(--title);"><i class="material-icons left">my_location</i>Obtener Ubicación</a>
+        <input id="nombre" type="text" class="validate" name="nombre">
+        <label for="nombre">Nombre</label>
       </div>
 
-      <div id="mapa"></div>
+      <div class="input-field">
+        <textarea id="direccion" class="materialize-textarea" name="direccion"></textarea>
+        <label for="direccion">Direccion</label>
+      </div>
 
+      <div class="input-field center" style="margin-top: 40px;">
+        <button id="btnCancelar" type="button" class="btn grey lighten-1 z-depth-0" style="margin-right: 10px;">Cancelar</button>
+        <button id="btnGuardar" type="button" class="btn add-btn z-depth-0">Guardar</button>
+      </div>
+    </form>
+
+    <!-- Codigo QR del pedido registrado -->
+    <div class="input-field center">
+      <h6>Codigo QR del pedido</h6>
+      <div id="qrcode"></div>
+    </div>
+
+    <div class="input-field">
+      <a class="waves-effect waves-light btn" id="btnUbicacion" style="background-color: var(--title);">
+        <i class="material-icons left">my_location</i>Obtener Ubicacion
+      </a>
+    </div>
+
+    <div id="mapa"></div>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-  <script src="https://www.gstatic.com/firebasejs/6.0.1/firebase-firestore.js"></script>
-  
+  <script src="../js/ui.js"></script>
   <script src="../js/firebase.js"></script>
   <script src="../js/qrcode.min.js"></script>
   <script src="../js/pedidos.js"></script>
-
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // menu lateral
-      const menus = document.querySelectorAll('.side-menu');
-      M.Sidenav.init(menus, {edge: 'right'});
-    });
-  </script>
-
 </body>
 </html>

@@ -1,0 +1,71 @@
+// Reglas de seguridad de Cloud Firestore para el proyecto appmovil-a6da0.
+//
+// COMO APLICARLAS (este archivo por si solo NO hace nada):
+//   Firebase Console -> Firestore Database -> pestana "Reglas"
+//   -> pegar el contenido -> Publicar
+//
+// Sin esto la app devuelve "permission-denied" y las listas salen vacias:
+// el modo de prueba de Firebase caduca a los 30 dias y a partir de ahi
+// bloquea todas las lecturas y escrituras.
+
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ATENCION: la app no tiene inicio de sesion, asi que estas reglas dejan
+    // el catalogo abierto a cualquiera que conozca el projectId. Sirven para
+    // una practica de clase; para algo real hay que anadir Firebase Auth y
+    // cambiar las condiciones por "request.auth != null" (ver abajo).
+
+    match /platillos/{platilloId} {
+      allow read: if true;
+
+      allow create: if request.resource.data.nombre is string
+                    && request.resource.data.nombre.size() > 0
+                    && request.resource.data.nombre.size() <= 100
+                    && request.resource.data.ingredientes is string
+                    && request.resource.data.ingredientes.size() <= 500
+                    && request.resource.data.precio is number
+                    && request.resource.data.precio >= 0
+                    && request.resource.data.foto is string
+                    && request.resource.data.foto.size() <= 400000;
+
+      allow update: if request.resource.data.precio is number
+                    && request.resource.data.precio >= 0;
+
+      allow delete: if true;
+    }
+
+    match /pedidos/{pedidoId} {
+      allow read: if true;
+
+      allow create: if request.resource.data.nombre is string
+                    && request.resource.data.nombre.size() > 0
+                    && request.resource.data.nombre.size() <= 100
+                    && request.resource.data.direccion is string
+                    && request.resource.data.direccion.size() > 0
+                    && request.resource.data.direccion.size() <= 500
+                    && request.resource.data.platillo is string
+                    && request.resource.data.platilloId is string;
+
+      allow update, delete: if false; // un pedido no se edita ni se borra desde la app
+    }
+
+    // Todo lo que no este declarado arriba queda cerrado.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
+// --- Version recomendada cuando anadas Firebase Auth -------------------------
+//
+// match /platillos/{platilloId} {
+//   allow read: if true;                       // el catalogo puede ser publico
+//   allow write: if request.auth != null;      // solo usuarios identificados
+// }
+// match /pedidos/{pedidoId} {
+//   allow create: if request.auth != null;
+//   allow read:   if request.auth != null && resource.data.uid == request.auth.uid;
+// }
