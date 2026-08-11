@@ -38,8 +38,9 @@ btnGuardar.addEventListener("click", () => {
 
     db.collection("pedidos").add(pedidoNuevo)
         .then(() => {
-            alert("Pedido guardado correctamente");
             limpiarFormulario();
+            generarQR(pedidoNuevo);
+            alert("Pedido guardado correctamente");
         })
         .catch((error) => {
             console.error("Error al guardar el pedido: ", error);
@@ -47,13 +48,42 @@ btnGuardar.addEventListener("click", () => {
         });
 });
 
-btnCancelar.addEventListener("click", limpiarFormulario);
+btnCancelar.addEventListener("click", () => {
+    limpiarFormulario();
+    borrarQR();
+});
 
 function limpiarFormulario() {
     selectPlatillo.selectedIndex = 0;
     inputNombre.value = "";
     inputDireccion.value = "";
     M.updateTextFields();
+}
+
+// --- Codigo QR del pedido registrado ---
+let qrcode;
+
+function generarQR(pedido) {
+    borrarQR();
+
+    // Generar código QR
+    qrcode = new QRCode("qrcode", {
+        text: `Platillo: ${pedido.platillo} - Cliente: ${pedido.nombre}`,
+        width: 128,
+        height: 128,
+        colorDark : "#000000",
+        colorLight : "#ffffff",
+        correctLevel : QRCode.CorrectLevel.H
+    });
+}
+
+function borrarQR() {
+    if (qrcode) {
+        // Borrar el código QR
+        qrcode.clear();
+        document.getElementById("qrcode").innerHTML = "";
+        qrcode = undefined;
+    }
 }
 
 let mapa;

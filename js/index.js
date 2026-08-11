@@ -14,7 +14,7 @@ function mostrarPlatillo(platillo, id) {
   if (platillo.foto) {
     fotoPlatillo = platillo.foto;
   } else {
-    fotoPlatillo = "/img/Comida_def.jpg";
+    fotoPlatillo = "img/Comida_def.jpg";
   }
   contenido = `
     <div class='card-panel recipe white row' id='${id}' data-id='${id}'>
@@ -62,7 +62,11 @@ const btnFoto = document.getElementById('btnFoto');
 btnFoto.addEventListener("click", function() {
   navigator.mediaDevices
     .getUserMedia({
-        video: true,
+        video: {
+          facingMode: {
+            ideal: "environment"
+          }
+        },
         audio: false
   })
   .then((stream) => {

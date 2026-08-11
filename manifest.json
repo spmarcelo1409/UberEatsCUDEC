@@ -3,6 +3,8 @@
   "short_name": "VPTT",
   "display": "standalone",
   "orientation": "portrait",
+  "start_url": "./",
+  "scope": "./",
   "icons": [
     {
       "src": "iconos/icon-16x16.png",
@@ -15,7 +17,7 @@
       "sizes": "32x32"
     },
     {
-      "src": "icon-48x48.png",
+      "src": "iconos/icon-48x48.png",
       "type": "image/png",
       "sizes": "48x48"
     },
@@ -25,7 +27,7 @@
       "sizes": "64x64"
     },
     {
-      "src": "icon-96x96.png",
+      "src": "iconos/icon-96x96.png",
       "type": "image/png",
       "sizes": "96x96"
     },
@@ -40,7 +42,7 @@
       "sizes": "144x144"
     },
     {
-      "src": "icon-152x152.png",
+      "src": "iconos/icon-152x152.png",
       "type": "image/png",
       "sizes": "152x152"
     },
@@ -50,7 +52,7 @@
       "sizes": "180x180"
     },
     {
-      "src": "icon-192x192.png",
+      "src": "iconos/icon-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
@@ -65,7 +67,7 @@
       "sizes": "384x384"
     },
     {
-      "src": "icon-512x512.png",
+      "src": "iconos/icon-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     },
