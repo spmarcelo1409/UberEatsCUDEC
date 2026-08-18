@@ -17,6 +17,6 @@ if (typeof firebase === 'undefined') {
     measurementId: "G-SCBEMMDRGD"
   };
 
-  firebase.initializeApp(firebaseConfig);
-  db = firebase.firestore();
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
 }
