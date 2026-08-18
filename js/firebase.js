@@ -1,8 +1,4 @@
-// 1. Importar las funciones necesarias de Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
-
-// Tu configuración
+// Configuración de tu proyecto
 const firebaseConfig = {
   apiKey: "AlzaSyD3VE1B14xeGkpTYT3FMwbTTsKnqccC4j8",
   authDomain: "appmovil-a6da0.firebaseapp.com",
@@ -13,9 +9,8 @@ const firebaseConfig = {
   measurementId: "G-SCBEMMDRGD"
 };
 
-// 2. Inicializar Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// Inicializar Firebase usando el objeto global cargado desde el HTML
+firebase.initializeApp(firebaseConfig);
 
-// Exportar la app por si la necesitas en db.js
-export { app };
+// Crear la variable global "db" (Firestore) que necesita tu archivo db.js
+var db = firebase.firestore();
